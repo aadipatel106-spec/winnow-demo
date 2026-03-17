@@ -3,7 +3,6 @@
 <head>
 <title>Winnow AI Waste Scanner Demo</title>
 <style>
-/* Body and general text */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -17,7 +16,6 @@ h1 {
   color: #8b00ff; /* dark purple header */
 }
 
-/* Video and overlay box */
 video {
   width: 70%;
   border-radius: 12px;
@@ -28,7 +26,7 @@ video {
 
 #overlay {
   position: absolute;
-  top: 80px; /* adjust depending on video placement */
+  top: 80px;
   left: 15%;
   width: 70%;
   height: 60%;
@@ -39,7 +37,6 @@ video {
   pointer-events: none;
 }
 
-/* Button */
 button {
   padding: 14px 24px;
   font-size: 18px;
@@ -51,14 +48,12 @@ button {
   border-radius: 8px;
 }
 
-/* Status text */
 #scanStatus {
   margin-top: 20px;
   font-size: 20px;
   color: #4b0082; /* dark purple text */
 }
 
-/* Report styling */
 #report {
   margin-top: 30px;
   background: white;
@@ -105,26 +100,38 @@ th {
 
 <div id="report">
   <h2>Food Waste Analysis Report</h2>
+  
+  <h3>Burger</h3>
   <table>
     <tr>
-      <th>Food Item</th>
+      <th>Ingredient</th>
       <th>Weight</th>
       <th>Estimated Cost</th>
     </tr>
-    <tr>
-      <td>Burger</td>
-      <td>0.35 lb</td>
-      <td>$2.10</td>
-    </tr>
-    <tr>
-      <td>Hotdog</td>
-      <td>0.22 lb</td>
-      <td>$1.30</td>
-    </tr>
+    <tr><td>Bun</td><td>0.10 lb</td><td>$0.60</td></tr>
+    <tr><td>Beef Patty</td><td>0.15 lb</td><td>$0.80</td></tr>
+    <tr><td>Cheese</td><td>0.03 lb</td><td>$0.30</td></tr>
+    <tr><td>Lettuce</td><td>0.02 lb</td><td>$0.10</td></tr>
+    <tr><td>Tomato</td><td>0.03 lb</td><td>$0.20</td></tr>
+    <tr><td>Sauce</td><td>0.02 lb</td><td>$0.10</td></tr>
   </table>
+
+  <h3>Hotdog</h3>
+  <table>
+    <tr>
+      <th>Ingredient</th>
+      <th>Weight</th>
+      <th>Estimated Cost</th>
+    </tr>
+    <tr><td>Bun</td><td>0.08 lb</td><td>$0.50</td></tr>
+    <tr><td>Sausage</td><td>0.10 lb</td><td>$0.60</td></tr>
+    <tr><td>Mustard/Ketchup</td><td>0.04 lb</td><td>$0.20</td></tr>
+  </table>
+
   <h3>Total Waste</h3>
   <p><b>Total Weight:</b> 0.57 lb</p>
   <p><b>Total Cost:</b> $3.40</p>
+
   <h3>Insights</h3>
   <p>• Burgers represent the highest waste item.</p>
   <p>• Reduce batch preparation during low demand periods.</p>
