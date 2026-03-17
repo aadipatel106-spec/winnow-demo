@@ -2,71 +2,89 @@
 <html>
 <head>
 <title>Winnow AI Waste Scanner Demo</title>
-
 <style>
-body{
-font-family:Arial;
-text-align:center;
-background:#eef2f5;
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #eef2f5;
+  margin:0;
+  padding:0;
 }
 
-h1{
-margin-top:20px;
+h1 {
+  margin-top: 20px;
 }
 
-video{
-width:70%;
-border-radius:12px;
-margin-top:20px;
+video {
+  width: 70%;
+  border-radius: 12px;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
 }
 
-button{
-padding:14px 24px;
-font-size:18px;
-margin-top:20px;
-cursor:pointer;
+#overlay {
+  position: absolute;
+  top: 80px; /* adjust depending on video placement */
+  left: 15%;
+  width: 70%;
+  height: 60%;
+  border: 3px solid limegreen;
+  border-radius: 12px;
+  z-index: 2;
+  display: none;
+  pointer-events: none;
 }
 
-#scanStatus{
-margin-top:20px;
-font-size:20px;
-color:#444;
+button {
+  padding: 14px 24px;
+  font-size: 18px;
+  margin-top: 20px;
+  cursor: pointer;
 }
 
-#report{
-margin-top:30px;
-background:white;
-width:70%;
-margin-left:auto;
-margin-right:auto;
-padding:25px;
-border-radius:12px;
-box-shadow:0px 3px 8px rgba(0,0,0,0.15);
-display:none;
+#scanStatus {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #444;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
+#report {
+  margin-top: 30px;
+  background: white;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 3px 8px rgba(0,0,0,0.15);
+  display: none;
 }
 
-th,td{
-padding:10px;
-border-bottom:1px solid #ddd;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
 }
 
-th{
-background:#f3f3f3;
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #f3f3f3;
 }
 </style>
 </head>
-
 <body>
 
 <h1>Winnow AI Food Waste Scanner</h1>
 
-<video id="camera" autoplay></video>
+<div style="position: relative; display: inline-block;">
+  <video id="camera" autoplay></video>
+  <div id="overlay"></div>
+</div>
 
 <br>
 
@@ -75,76 +93,66 @@ background:#f3f3f3;
 <div id="scanStatus"></div>
 
 <div id="report">
-
-<h2>Food Waste Analysis Report</h2>
-
-<table>
-<tr>
-<th>Food Item</th>
-<th>Weight</th>
-<th>Estimated Cost</th>
-</tr>
-
-<tr>
-<td>Burger</td>
-<td>0.35 lb</td>
-<td>$2.10</td>
-</tr>
-
-<tr>
-<td>Hotdog</td>
-<td>0.22 lb</td>
-<td>$1.30</td>
-</tr>
-
-</table>
-
-<h3>Total Waste</h3>
-
-<p><b>Total Weight:</b> 0.57 lb</p>
-<p><b>Total Cost:</b> $3.40</p>
-
-<h3>Insights</h3>
-
-<p>• Burgers represent the highest waste item.</p>
-<p>• Reduce batch preparation during low demand periods.</p>
-<p>• Monitor lunch service waste levels.</p>
-
+  <h2>Food Waste Analysis Report</h2>
+  <table>
+    <tr>
+      <th>Food Item</th>
+      <th>Weight</th>
+      <th>Estimated Cost</th>
+    </tr>
+    <tr>
+      <td>Burger</td>
+      <td>0.35 lb</td>
+      <td>$2.10</td>
+    </tr>
+    <tr>
+      <td>Hotdog</td>
+      <td>0.22 lb</td>
+      <td>$1.30</td>
+    </tr>
+  </table>
+  <h3>Total Waste</h3>
+  <p><b>Total Weight:</b> 0.57 lb</p>
+  <p><b>Total Cost:</b> $3.40</p>
+  <h3>Insights</h3>
+  <p>• Burgers represent the highest waste item.</p>
+  <p>• Reduce batch preparation during low demand periods.</p>
+  <p>• Monitor lunch service waste levels.</p>
 </div>
 
 <script>
-
 const video = document.getElementById("camera");
+const overlay = document.getElementById("overlay");
 
-navigator.mediaDevices.getUserMedia({video:true})
-.then(stream=>{
-video.srcObject = stream;
+// Force rear camera on phones/tablets
+navigator.mediaDevices.getUserMedia({
+  video: { facingMode: { exact: "environment" } }
+})
+.then(stream => {
+  video.srcObject = stream;
+})
+.catch(() => {
+  // fallback if exact rear camera not available
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => { video.srcObject = stream; });
 });
 
-function scanFood(){
+function scanFood() {
+  const status = document.getElementById("scanStatus");
+  const report = document.getElementById("report");
 
-const status = document.getElementById("scanStatus");
-const report = document.getElementById("report");
+  report.style.display = "none";
+  overlay.style.display = "block"; // show green box
+  status.innerHTML = "Scanning food waste...";
 
-report.style.display="none";
-
-status.innerHTML="Scanning food waste...";
-
-setTimeout(()=>{
-status.innerHTML="Analyzing image...";
-},1500);
-
-setTimeout(()=>{
-status.innerHTML="Identifying items...";
-},3000);
-
-setTimeout(()=>{
-status.innerHTML="Analysis complete.";
-report.style.display="block";
-},4500);
-
+  setTimeout(() => { status.innerHTML = "Analyzing image..."; }, 1500);
+  setTimeout(() => { status.innerHTML = "Identifying items..."; }, 3000);
+  setTimeout(() => {
+    status.innerHTML = "Analysis complete.";
+    report.style.display = "block";
+    overlay.style.display = "none"; // hide green box
+  }, 4500);
 }
-
 </script>
 
 </body>
